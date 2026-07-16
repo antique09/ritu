@@ -504,49 +504,64 @@
             });
 
                        // Playlist play button functionality
-// Playlist play button functionality
 const audioPlayer = document.getElementById("audio-player");
 const playlistItems = document.querySelectorAll(".playlist-item-play");
 
 playlistItems.forEach((btn) => {
+
     btn.addEventListener("click", function () {
 
-        const songDiv = this.closest(".playlist-item");
-        const songSrc = songDiv.getAttribute("data-song-src");
+        const item = this.closest(".playlist-item");
+        const song = item.dataset.songSrc;
         const icon = this.querySelector("i");
 
-        // Reset all icons
-        playlistItems.forEach((item) => {
-            const i = item.querySelector("i");
-            i.classList.remove("fa-pause");
-            i.classList.add("fa-play");
+        // Reset every icon
+        playlistItems.forEach((b) => {
+            const ic = b.querySelector("i");
+            ic.classList.remove("fa-pause");
+            ic.classList.add("fa-play");
         });
 
-        if (audioPlayer.src.includes(songSrc) && !audioPlayer.paused) {
+        // Toggle same song
+        if (
+            audioPlayer.getAttribute("src") === song &&
+            !audioPlayer.paused
+        ) {
 
             audioPlayer.pause();
 
-            icon.classList.remove("fa-pause");
-            icon.classList.add("fa-play");
-
-        } else {
-
-            audioPlayer.src = songSrc;
-            audioPlayer.play();
-
-            icon.classList.remove("fa-play");
-            icon.classList.add("fa-pause");
+            return;
         }
 
+        audioPlayer.src = song;
+
+        audioPlayer.play();
+
+        icon.classList.remove("fa-play");
+        icon.classList.add("fa-pause");
+
     });
+
+});
+
+audioPlayer.addEventListener("pause", () => {
+
+    playlistItems.forEach((b) => {
+        const ic = b.querySelector("i");
+        ic.classList.remove("fa-pause");
+        ic.classList.add("fa-play");
+    });
+
 });
 
 audioPlayer.addEventListener("ended", () => {
-    playlistItems.forEach((item) => {
-        const i = item.querySelector("i");
-        i.classList.remove("fa-pause");
-        i.classList.add("fa-play");
+
+    playlistItems.forEach((b) => {
+        const ic = b.querySelector("i");
+        ic.classList.remove("fa-pause");
+        ic.classList.add("fa-play");
     });
+
 });
             // Helper functions
             function createFloatingElement(element, index) {
